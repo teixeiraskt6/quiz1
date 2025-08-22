@@ -1,0 +1,635 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    background: #000;
+}
+
+.quiz-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* overlay removido */
+.quiz-container::before { content: none; }
+
+.question-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 2;
+    padding: 20px;
+}
+
+.question-slide.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.question-slide.prev {
+    transform: translateX(-100%);
+}
+
+.question-content {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    z-index: 3;
+}
+
+.question-header {
+    margin-bottom: 40px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.progress {
+    height: 100%;
+    background: linear-gradient(90deg, #9CCC65, #E53935);
+    border-radius: 2px;
+    transition: width 0.6s ease;
+    box-shadow: 0 0 20px rgba(156, 204, 101, 0.5);
+}
+
+.question-number {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    font-weight: 600;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.question-slide#question1 .question-text {
+    background-color: #b6ff3b; /* Verde Abacate - Tom exato da imagem */
+    border-radius: 20px;
+    padding: 15px 35px;
+    box-shadow: 0 0 10px rgba(182, 255, 59, 0.7), 0 0 20px rgba(182, 255, 59, 0.5); /* Efeito de brilho mais suave */
+}
+
+.question-slide#question1 .question-text h2 {
+    color: #000; /* Texto preto */
+    text-shadow: none;
+    animation: none;
+    font-size: 13px; /* Tamanho da fonte ainda menor para caber em 4 linhas */
+    text-transform: uppercase; /* Texto em maiúsculas */
+}
+
+.question-slide#question1 .question-text p {
+    color: #000; /* Texto preto */
+    text-shadow: none;
+    animation: none;
+    font-size: 14px; /* Tamanho da fonte diminuído */
+    text-transform: uppercase; /* Texto em maiúsculas */
+}
+
+@keyframes redPulse {
+    0% {
+        text-shadow: 0 0 2px rgba(255, 0, 0, 0.3), 0 0 4px rgba(255, 0, 0, 0.3);
+    }
+    50% {
+        text-shadow: 0 0 8px rgba(255, 0, 0, 0.8), 0 0 12px rgba(255, 0, 0, 0.8);
+    }
+    100% {
+        text-shadow: 0 0 2px rgba(255, 0, 0, 0.3), 0 0 4px rgba(255, 0, 0, 0.3);
+    }
+}
+
+.question-subtitle {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 20px 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    text-transform: uppercase; /* Adicionado para maiúsculas */
+}
+
+/* Estilos para o balão verde abacate e texto preto (perguntas 2, 3 e 4) */
+.question-slide:not(#question1) .question-text {
+    background-color: #b6ff3b; /* Verde Abacate - Tom exato da imagem */
+    border-radius: 20px;
+    padding: 15px 35px;
+    box-shadow: 0 0 10px rgba(182, 255, 59, 0.7), 0 0 20px rgba(182, 255, 59, 0.5); /* Efeito de brilho mais suave */
+}
+
+.question-slide:not(#question1) .question-text h2,
+.question-slide:not(#question1) .question-text p {
+    color: #000; /* Texto preto */
+    text-shadow: none;
+    animation: none;
+    font-size: 13px; /* Tamanho da fonte ainda menor para caber em 4 linhas */
+    text-transform: uppercase; /* Texto em maiúsculas */
+}
+
+.answers {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.answer-btn {
+    background: #000;
+    border: 2px solid #b6ff3b; /* Cor da borda alterada */
+    border-radius: 20px;
+    padding: 20px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.answer-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(182, 255, 59, 0.1), transparent); /* Cor do brilho alterada */
+    transition: left 0.5s ease;
+}
+
+.answer-btn:hover {
+    transform: translateY(-2px);
+    border-color: #b6ff3b; /* Cor da borda no hover alterada */
+    box-shadow: 0 10px 30px rgba(182, 255, 59, 0.3); /* Cor da sombra no hover alterada */
+    background: rgba(182, 255, 59, 0.1);
+}
+
+.answer-btn:active {
+    transform: translateY(0);
+    animation: pulse 0.3s ease;
+}
+
+.answer-btn .emoji {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.answer-btn .text {
+    flex: 1;
+    line-height: 1.3;
+}
+
+.final-slide .question-text {
+    margin-bottom: 20px;
+}
+
+.final-text h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+
+
+/* Animações */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
+
+@keyframes glow {
+    0% {
+    box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(255, 0, 127, 0.8);
+        transform: scale(1.02);
+    }
+    100% {
+    box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);
+        transform: scale(1);
+    }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-10px) rotate(1deg); }
+    66% { transform: translateY(5px) rotate(-1deg); }
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+    .question-content {
+        max-width: 350px;
+        padding: 0 10px;
+    }
+    
+    .question-text h2 {
+        font-size: 20px;
+    }
+    
+    .question-text p {
+        font-size: 14px;
+    }
+    
+    .answer-btn {
+        padding: 18px;
+        font-size: 14px;
+    }
+    
+    .answer-btn .emoji {
+        font-size: 20px;
+    }
+    
+    .final-text h2 {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 360px) {
+    .question-content {
+        max-width: 320px;
+    }
+    
+    .question-text h2 {
+        font-size: 18px;
+    }
+    
+    .answer-btn {
+        padding: 15px;
+        font-size: 13px;
+    }
+}
+
+/* Estilos para o cabeçalho do Story (Instagram-like) */
+.story-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 5;
+}
+
+.story-progress-container {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+}
+
+.story-progress-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.story-progress-bar.active::after {
+    content: '';
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: #fff;
+    border-radius: 2px;
+}
+
+.story-progress-bar.completed {
+    background: #fff;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.profile-pic {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    object-fit: contain;
+}
+
+/* Ajustes para o question-header existente */
+.question-slide .question-header {
+    margin-bottom: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    padding: 20px;
+}
+
+.question-slide .answers {
+    margin-top: 20px;
+}
+
+/* Remover barra de progresso antiga */
+.question-header .progress-bar,
+.question-header .question-number {
+    display: none;
+}
+
+@keyframes whitePulse {
+    0% {
+        text-shadow: 0 0 2px rgba(255, 255, 255, 0.3), 0 0 4px rgba(255, 255, 255, 0.3);
+    }
+    50% {
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.6), 0 0 12px rgba(255, 255, 255, 0.6);
+    }
+    100% {
+        text-shadow: 0 0 2px rgba(255, 255, 255, 0.3), 0 0 4px rgba(255, 255, 255, 0.3);
+    }
+}
+
+
+
+/* Estilos para a barra de interação */
+.interaction-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px 20px;
+    background: transparent; /* Fundo transparente */
+    backdrop-filter: none; /* Remover blur */
+    display: flex;
+    justify-content: space-between; /* Alinhar ícones à esquerda e à direita */
+    align-items: center;
+    z-index: 10;
+    border-top: none; /* Remover borda */
+}
+
+.left-icons {
+    display: flex;
+    gap: 20px;
+}
+
+.right-icons {
+    display: flex;
+}
+
+.icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    font-size: 0; /* Remover texto */
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.icon-item:hover {
+    transform: translateY(-3px);
+}
+
+.icon-item svg {
+    width: 24px;
+    height: 24px;
+    stroke: #fff; /* Cor dos ícones */
+    fill: none;
+    margin-bottom: 0; /* Remover margem */
+}
+
+.icon-item:hover svg {
+    stroke: #b6ff3b; /* Cor neon no hover */
+}
+
+
+
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.more-options {
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    padding-right: 10px; /* Ajuste para alinhar com a borda direita */
+}
+
+
+
+.question-header {
+    position: relative; /* Para posicionar os ... dentro do header */
+}
+
+.question-slide .more-options {
+    position: absolute;
+    top: 10px; /* Ajuste conforme necessário */
+    right: 10px; /* Ajuste conforme necessário */
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 4; /* Para garantir que fique acima de outros elementos */
+}
+
+
+
+.profile-info .more-options {
+    margin-left: auto;
+}
+
+
+
+.question-subtitle-small {
+    color: #fff;
+    font-size: 14px; /* Tamanho menor */
+    font-weight: 600;
+    margin: 10px 0; /* Ajuste de margem */
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    text-transform: uppercase;
+}
+
+
+
+
+
+
+
+
+
+.final-btn {
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid #FF0000; /* Vermelho neon */
+    box-shadow: 0 0 5px #FF0000, 0 0 20px #FF0000; /* Efeito neon inicial */
+    animation: pulse-red-neon 3s infinite alternate;
+    border-radius: 20px;
+    padding: 20px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.final-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 0, 127, 0.1), transparent); /* Brilho vermelho neon */
+    transition: left 0.5s ease;
+}
+
+.final-btn:hover {
+    transform: translateY(-2px);
+    border-color: #FF0000; /* Vermelho neon no hover */
+    box-shadow: 0 0 5px #FF0000, 0 0 20px #FF0000;
+    background: rgba(255, 0, 127, 0.1); /* Fundo levemente vermelho neon no hover */
+}
+
+.final-btn:active {
+    transform: translateY(0);
+    animation: pulse 0.3s ease;
+}
+
+
+
+
+
+
+
+.final-answer .answer-btn {
+    border: 2px solid #FF0000; /* Vermelho neon */
+    box-shadow: 0 0 5px #FF0000, 0 0 20px #FF0000; /* Efeito neon inicial */
+    animation: pulse-red-neon 3s infinite alternate;
+}
+
+.final-answer .answer-btn:hover {
+    border-color: #FF0000; /* Vermelho neon no hover */
+    box-shadow: 0 0 5px #FF0000, 0 0 20px #FF0000;
+    background: rgba(255, 0, 127, 0.1); /* Fundo levemente vermelho neon no hover */
+}
+
+.final-answer .answer-btn::before {
+    background: linear-gradient(90deg, transparent, rgba(255, 0, 127, 0.1), transparent); /* Brilho vermelho neon */
+}
+
+
+
+
+.final-btn {
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid #FF0000; /* Vermelho neon */
+    box-shadow: 0 0 5px #FF0000, 0 0 20px #FF0000; /* Efeito neon inicial */
+    animation: pulse-red-neon 3s infinite alternate;
+    border-radius: 20px;
+    padding: 20px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.final-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 0, 127, 0.1), transparent); /* Brilho vermelho neon */
+    transition: left 0.5s ease;
+}
+
+.final-btn:hover {
+    transform: translateY(-2px);
+    border-color: #FF0000; /* Vermelho neon no hover */
+    box-shadow: 0 0 5px #FF0000, 0 0 20px #FF0000;
+    background: rgba(255, 0, 127, 0.1); /* Fundo levemente vermelho neon no hover */
+}
+
+.final-btn:active {
+    transform: translateY(0);
+    animation: pulse 0.3s ease;
+}
+
+
+
+
+@keyframes pulse-red-neon {
+    0% { border-color: #FF0000; box-shadow: 0 0 5px #FF0000; }
+    50% { border-color: #FF4500; box-shadow: 0 0 20px #FF4500; }
+    100% { border-color: #FF0000; box-shadow: 0 0 5px #FF0000; }
+}
+
+
+
+
+.final-subtitle {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 20px 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    text-transform: uppercase;
+}
+
