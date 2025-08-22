@@ -24,28 +24,125 @@
         </div>
 
         <!-- Pergunta 1 -->
-        <div class="question-slide active" id="question1">
-            <div class="question-content">
-                <div class="question-header">
-                    <div class="question-text">
-                        <h2>Se você ainda não fez seu primeiro dólar online... com certeza você está no caminho errado.</h2>
-                    </div>
-                    <p class="question-subtitle">Qual sua situação hoje?</p>
-                    
-                    <div class="answers">
-                        <button class="answer-btn" data-next="question2">
-                            <span class="emoji">💀</span>
-                            <span class="text">Estou totalmente perdido, só gastei tempo e dinheiro.</span>
-                        </button>
-                        <button class="answer-btn" data-next="question2">
-                            <span class="emoji">🔥</span>
-                            <span class="text">Já fiz uns trocados, mas quero um resultado de verdade.</span>
-                        </button>
-                    </div>
+ <div class="question-slide active" id="question1">
+    <style>
+        /* Balão do texto principal: igual ao original! */
+        .question-slide.active .question-text {
+            background: #b6ff3b;
+            border-radius: 18px;
+            padding: 16px 18px;
+            box-shadow: 0 0 18px #b6ff3b99, 0 0 32px #b6ff3b55;
+            max-width: 250px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Bem-vindo: sempre à esquerda, menor, uma linha */
+        .question-slide.active .welcome-strip {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.89rem;
+            font-family: inherit;
+            font-weight: 400;
+            color: #222;
+            margin-bottom: 6px;
+            background: none;
+            padding: 0;
+            border-radius: 0;
+            line-height: 1;
+            white-space: nowrap;
+            justify-content: flex-start;
+            width: fit-content; /* <--- só o texto, não ocupa toda largura */
+            min-width: 0;
+        }
+        /* Força à esquerda no mobile, com margin para garantir */
+        @media (max-width: 500px) {
+            .question-slide.active .welcome-strip {
+                justify-content: flex-start !important;
+                margin-left: 0 !important;
+            }
+        }
+        /* Ícone: círculo redondo preto, triângulo alerta preto dentro, sem fundo branco */
+        .question-slide.active .welcome-strip .welcome-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 19px;
+            height: 19px;
+            border-radius: 50%;
+            background: transparent;
+            border: 1.5px solid #222;
+            margin-right: 3px;
+        }
+        .question-slide.active .welcome-strip .welcome-icon svg {
+            width: 11px;
+            height: 11px;
+            display: block;
+        }
+        .question-slide.active .question-text h2 {
+            font-size: 1.24rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 0;
+            color: #141414;
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+        .question-slide.active .question-subtitle {
+            margin-bottom: 18px;
+        }
+        .question-slide.active .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .question-slide.active .answer-btn .emoji {
+            margin-right: 6px;
+            font-size: 1.15em;
+        }
+        .question-slide.active .answer-btn .text {
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: inherit;
+            letter-spacing: 0.5px;
+        }
+    </style>
+    <div class="question-content">
+        <div class="question-header">
+            <div class="question-text">
+                <!-- Faixa de boas-vindas fina, alinhada à esquerda, ícone de alerta preto no círculo preto sem fundo -->
+                <div class="welcome-strip">
+                    <span class="welcome-icon">
+                        <!-- SVG de triângulo alerta preto, dentro do círculo preto -->
+                        <svg viewBox="0 0 20 20" fill="none">
+                            <path d="M10 3.5L3.5 16.5H16.5L10 3.5Z" stroke="#222" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            <line x1="10" y1="7.5" x2="10" y2="11.5" stroke="#222" stroke-width="1.6" stroke-linecap="round"/>
+                            <circle cx="10" cy="14" r="1" fill="#222"/>
+                        </svg>
+                    </span>
+                    <span>BEM VINDO AO LUCRATIVAS!</span>
                 </div>
+                <h2>Se você ainda não fez seu primeiro dólar online... com certeza você está no caminho errado.</h2>
+            </div>
+            <p class="question-subtitle">Qual sua situação hoje?</p>
+            <div class="answers">
+                <button class="answer-btn" data-next="question2">
+                    <span class="emoji">💀</span>
+                    <span class="text">Estou totalmente perdido, só gastei tempo e dinheiro.</span>
+                </button>
+                <button class="answer-btn" data-next="question2">
+                    <span class="emoji">🔥</span>
+                    <span class="text">Já fiz uns trocados, mas quero um resultado de verdade.</span>
+                </button>
             </div>
         </div>
-
+    </div>
+</div>
         <!-- Pergunta 2 -->
         <div class="question-slide" id="question2">
             <div class="question-content">
@@ -94,23 +191,73 @@
         </div>
 
         <!-- Pergunta 4 - Tela Final -->
-        <div class="question-slide final-slide" id="question4">
-            <div class="question-content">
-                <div class="question-header">
-                    <div class="question-text final-text">
-                        <h2>Essa é a sua chance de acessar um método que realmente funciona.</h2>
-                    </div>
-                    <p class="final-subtitle">A DECISÃO É SUA.</p>
-                    
-                    <div class="answers final-answer">
-                        <button class="answer-btn final-btn" data-next="final-action">
-                            <span class="emoji">🔥</span>
-                            <span class="text">SIM, QUERO VER O MÉTODO AGORA!</span>
-                        </button>
-                    </div>
-                </div>
+      <div class="question-slide final-slide" id="question4">
+    <style>
+        /* Balão verde neon do Step 4 */
+        .question-slide.final-slide .question-text.final-text {
+            background: #b6ff3b;
+            border-radius: 18px;
+            padding: 16px 18px; /* diminuído padding lateral */
+            margin-bottom: 18px;
+            box-shadow: 0 0 18px #b6ff3b99, 0 0 32px #b6ff3b55;
+            max-width: 250px; /* diminuído largura máxima */
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Tamanho da fonte do balão (mantido o ajuste anterior) */
+        .question-slide.final-slide .question-text.final-text h2 {
+            font-size: 1.24rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 0;
+            color: #141414;
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+        /* Botão de baixo: altura levemente aumentada */
+        .question-slide.final-slide .final-btn {
+            padding-top: 14px !important;
+            padding-bottom: 14px !important;
+        }
+        .question-slide.final-slide .final-btn:hover {
+            filter: brightness(0.95);
+        }
+        .question-slide.final-slide .final-btn .emoji {
+            margin-right: 6px;
+            font-size: 1.15em;
+        }
+        .question-slide.final-slide .final-btn .text {
+            font-size: 0.98rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .question-slide.final-slide .final-answer {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+    <div class="question-content">
+        <div class="question-header">
+            <div class="question-text final-text">
+                <h2>Essa é a sua chance de acessar um método que realmente funciona.</h2>
+            </div>
+            <p class="final-subtitle">A DECISÃO É SUA.</p>
+            
+            <div class="answers final-answer">
+                <button class="answer-btn final-btn" data-next="final-action">
+                    <span class="emoji">🔥</span>
+                    <span class="text">SIM, QUERO VER O MÉTODO AGORA!</span>
+                </button>
             </div>
         </div>
+    </div>
+</div>
 
         <div class="interaction-bar">
             <div class="left-icons">
